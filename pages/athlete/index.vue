@@ -1,6 +1,12 @@
 <script setup>
     import { computed, nextTick, ref, watch } from 'vue'
+    import { VDateInput } from 'vuetify/labs/VDateInput'
+
     const { status, data, error } = await useMacsApi('/athlete')
+    const {data: countries} = await useMacsApi('/country', {server: false})
+    const {data: clubs} = await useMacsApi('/club', {server: false})
+    const {data: documentTypes} = await useMacsApi('/doc-type', {server: false})
+    const {data: belts} = await useMacsApi('/belt-grade', {server: false})
     const sexos = [{value: "MALE", title: "Masculino"}, {value: "FEMALE", title: "Femenino"}];
     const headers = ref([
         { title: "Id", key: "id"},
@@ -20,6 +26,7 @@
         { title: "Peso", key: 'weight'},
         { title: "Sexo", key: 'sex'},
         { title: "Fecha de nacimiento", key: "birthDate"},
+        { title: "Club", key: 'club.name'},
         { title: 'Actions', key: 'actions', sortable: false }
     ])
     const dialog = ref(false)
@@ -36,6 +43,10 @@
     function editItem (item) {
         editedIndex.value = data.value.indexOf(item)
         editedItem.value = Object.assign({}, item)
+        editedItem.value.documentTypeId = item.documentType.id
+        editedItem.value.countryId = item.homeland.id
+        editedItem.value.clubId = item.club.id
+        editedItem.value.beltId = item.belt.id
         dialog.value = true
     }
 
@@ -72,17 +83,15 @@
     })
     function closeDelete () {
         dialogDelete.value = false
-        nextTick(() => {
-            editedItem.value = Object.assign({}, defaultItem.value)
-            editedIndex.value = -1
-        })
-  }
-  watch(dialog, val => {
-    val || close()
-  })
-  watch(dialogDelete, val => {
-    val || closeDelete()
-  })
+        
+    }
+    watch(dialog, val => {
+        val || close()
+    })
+    watch(dialogDelete, val => {
+        val || closeDelete()
+    })
+
 </script>
 <template>
 <div v-if="status === 'error'">
@@ -136,6 +145,13 @@
                       v-model="editedItem.lastName"
                       label="Apellido"
                     ></v-text-field>
+                    <v-select
+                        label="Tipo de documento"
+                        :items="documentTypes"
+                        item-title="name"
+                        item-value="id"
+                        v-model="editedItem.documentTypeId"
+                    ></v-select>
                     <v-text-field
                       v-model="editedItem.idNumber"
                       label="Numero de identificación"
@@ -143,7 +159,37 @@
                     <v-select
                         label="Sexo"
                         :items="sexos"
+                        v-model="editedItem.sex"
                     ></v-select>
+
+                    <v-select
+                        label="Pais"
+                        :items="countries"
+                        item-title="name"
+                        item-value="id"
+                        v-model="editedItem.countryId"
+                    ></v-select>
+                    <v-select
+                        label="Club"
+                        :items="clubs"
+                        item-title="name"
+                        item-value="id"
+                        v-model="editedItem.clubId"
+                    ></v-select>
+                    <v-select
+                        label="Cinturon"
+                        :items="belts"
+                        item-title="color"
+                        item-value="id"
+                        v-model="editedItem.beltId"
+                    ></v-select>
+                    
+                    <v-date-input 
+                        label="Fecha de nacimiento"
+                        v-model="editedItem.birthDate"
+                    ></v-date-input>
+
+
                 </v-container>
                 </v-card-text>
 
