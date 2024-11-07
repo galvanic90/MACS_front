@@ -42,6 +42,7 @@
     }
     function editItem (item) {
         editedIndex.value = data.value.indexOf(item)
+        editedItem.value.id = item.id
         editedItem.value.name = item.name
         editedItem.value.lastName = item.lastName
         editedItem.value.idNumber = item.idNumber
@@ -73,6 +74,7 @@
         })
         console.log(res)
         closeDelete()
+        refresh()
     }
     function close () {
         dialog.value = false
@@ -83,6 +85,7 @@
     }
     async function save () {
         if (editedIndex.value > -1) {
+            console.log(editedItem.value)
             const res = await $fetch(`http://127.0.0.1:8080/athlete/${editedItem.value.id}`, {
                 method: 'PUT',
                 body: editedItem.value
@@ -95,7 +98,9 @@
             })
             console.log(res)
         }
+        refresh()
         close()
+        
     }
     const formTitle = computed(() => {
         return editedIndex.value === -1 ? 'Nuevo deportista' : 'Editar deportista'
@@ -103,6 +108,9 @@
     function closeDelete () {
         dialogDelete.value = false
         
+    }
+    async function refresh() {
+        await refreshNuxtData()
     }
     watch(dialog, val => {
         val || close()
