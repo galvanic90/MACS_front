@@ -1,6 +1,7 @@
 <script setup>
     import { computed, nextTick, ref, watch } from 'vue'
     const { status, data, error } = await useMacsApi('/athlete')
+    const sexos = [{value: "MALE", title: "Masculino"}, {value: "FEMALE", title: "Femenino"}];
     const headers = ref([
         { title: "Id", key: "id"},
         { title: "Nombre", key: "name"},
@@ -54,16 +55,20 @@
         editedIndex.value = -1
         })
     }
-    function save () {
+    async function save () {
         if (editedIndex.value > -1) {
             Object.assign(data.value[editedIndex.value], editedItem.value)
         } else {
-            desserts.value.push(editedItem.value)
+            const res = await $fetch('http://127.0.0.1:8080/athlete', {
+                method: 'POST',
+                body: editedItem.value
+            })
+            console.log(res)
         }
         close()
     }
     const formTitle = computed(() => {
-        return editedIndex.value === -1 ? 'Nuevo atleta' : 'Editar atleta'
+        return editedIndex.value === -1 ? 'Nuevo deportista' : 'Editar deportista'
     })
     function closeDelete () {
         dialogDelete.value = false
@@ -127,6 +132,18 @@
                       v-model="editedItem.name"
                       label="Nombre"
                     ></v-text-field>
+                    <v-text-field
+                      v-model="editedItem.lastName"
+                      label="Apellido"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="editedItem.idNumber"
+                      label="Numero de identificación"
+                    ></v-text-field>
+                    <v-select
+                        label="Sexo"
+                        :items="sexos"
+                    ></v-select>
                 </v-container>
                 </v-card-text>
 
