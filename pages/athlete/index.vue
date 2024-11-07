@@ -42,11 +42,23 @@
     }
     function editItem (item) {
         editedIndex.value = data.value.indexOf(item)
-        editedItem.value = Object.assign({}, item)
-        editedItem.value.documentTypeId = item.documentType.id
-        editedItem.value.countryId = item.homeland.id
-        editedItem.value.clubId = item.club.id
-        editedItem.value.beltId = item.belt.id
+        editedItem.value.name = item.name
+        editedItem.value.lastName = item.lastName
+        editedItem.value.idNumber = item.idNumber
+        editedItem.value.sex = item.sex
+        editedItem.value.birthDate = item.birthDate
+        if(item.documentType) {
+            editedItem.value.documentTypeId = item.documentType.id
+        }
+        if(item.homeland) {
+            editedItem.value.countryId = item.homeland.id
+        }
+        if(item.club) {
+            editedItem.value.clubId = item.club.id
+        }
+        if(item.belt) {
+            editedItem.value.beltId = item.belt.id
+        }
         dialog.value = true
     }
 
@@ -55,8 +67,11 @@
         editedItem.value = Object.assign({}, item)
         dialogDelete.value = true
     }
-    function deleteItemConfirm () {
-        data.value.splice(editedIndex.value, 1)
+    async function deleteItemConfirm () {
+        const res = await $fetch(`http://127.0.0.1:8080/athlete/${editedItem.value.id}`, {
+            method: 'DELETE'
+        })
+        console.log(res)
         closeDelete()
     }
     function close () {
@@ -68,7 +83,11 @@
     }
     async function save () {
         if (editedIndex.value > -1) {
-            Object.assign(data.value[editedIndex.value], editedItem.value)
+            const res = await $fetch(`http://127.0.0.1:8080/athlete/${editedItem.value.id}`, {
+                method: 'PUT',
+                body: editedItem.value
+            })
+            console.log(res)
         } else {
             const res = await $fetch('http://127.0.0.1:8080/athlete', {
                 method: 'POST',
