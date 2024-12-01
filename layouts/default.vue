@@ -8,7 +8,7 @@
         >
           <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
   
-          <v-toolbar-title>My files</v-toolbar-title>
+          <v-toolbar-title>MACS</v-toolbar-title>
   
           <v-spacer></v-spacer>
   
@@ -26,9 +26,13 @@
           :location="$vuetify.display.mobile ? 'bottom' : undefined"
           temporary
         >
-          <v-list
-            :items="items"
-          ></v-list>
+        <v-list>
+          <v-list-item v-for="(item, index) in items" :key="index" :to="item.route"> 
+            <v-list-item-content> 
+              <v-list-item-title>{{ item.title }}</v-list-item-title> 
+            </v-list-item-content>
+           </v-list-item>
+           </v-list>
         </v-navigation-drawer>
   
         <v-main style="height: 500px;">
@@ -44,12 +48,12 @@
         group: null,
         items: [
           {
-            title: 'Foo',
-            value: 'foo',
+            title: 'Deportista',
+            route: '/athlete',
           },
           {
-            title: 'Bar',
-            value: 'bar',
+            title: 'Club',
+            route: '/club',
           },
           {
             title: 'Fizz',
