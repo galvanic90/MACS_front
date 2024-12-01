@@ -2,7 +2,6 @@
     import { ref } from 'vue'
     var loading = true
     const { status, data } = await useMacsApi('/club')
-    const {data: municipalities} = await useMacsApi('/municipality', {server: false})
 
     loading = status === 'pending'
     const headers = ref([
@@ -18,7 +17,9 @@
                 { title: "Municipio", key: "municipality.name"}, 
             ]
             
-        }
+        },
+        { title: 'Actions', key: 'actions', sortable: false }
+
     ])
     function isPending() {
         return status === 'pending'
@@ -46,6 +47,9 @@
       >
         mdi-delete
       </v-icon>
+    </template>
+    <template v-slot:top>
+
     </template>
 </v-data-table>
 </template>
