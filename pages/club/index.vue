@@ -87,14 +87,6 @@ const handleDelete = async (id) => {
   }
 };
 
-const handleFocus = () => {
-  console.log('Focused on input');
-};
-
-const handleBlur = () => {
-  console.log('Blurred from input');
-};
-
 // Watchers to ensure form state doesn't reset unintentionally
 watch(showDialog, (newVal) => {
   if (!newVal) {
@@ -104,51 +96,45 @@ watch(showDialog, (newVal) => {
 </script>
 
 <template>
-  <v-container>
-    <v-toolbar flat>
-      <v-toolbar-title>Lista de Clubes</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" @click="createItem">Crear Club</v-btn>
-    </v-toolbar>
-    <v-alert v-if="status === 'error'" type="error">Error al obtener los datos</v-alert>
-    <v-progress-circular v-if="status === 'loading'" indeterminate></v-progress-circular>
-    <CrudComponent
-      v-if="status === 'success'"
-      :items="clubs"
-      :headers="headers"
-      entityName="Club"
-      @edit="editItem"
-      @delete="handleDelete"
-    />
+  <v-toolbar flat>
+    <v-toolbar-title>Lista de Clubes</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn color="primary" @click="createItem">Crear Club</v-btn>
+  </v-toolbar>
+  <v-alert v-if="status === 'error'" type="error">Error al obtener los datos</v-alert>
+  <v-progress-circular v-if="status === 'loading'" indeterminate></v-progress-circular>
+  <CrudComponent
+    v-if="status === 'success'"
+    :items="clubs"
+    :headers="headers"
+    entityName="Club"
+    @edit="editItem"
+    @delete="handleDelete"
+  />
 
-    <!-- Crear/Editar Dialog -->
-    <v-dialog v-model="showDialog" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ isEditMode ? `Editar Club` : `Crear Club` }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-form ref="form">
-            <v-text-field
-              v-model="clubForm.name"
-              label="Nombre"
-              @focus="handleFocus"
-              @blur="handleBlur"
-            ></v-text-field>
-            <v-text-field
-              v-model="clubForm.email"
-              label="Correo Electrónico"
-              @focus="handleFocus"
-              @blur="handleBlur"
-            ></v-text-field>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="cancel">Cancelar</v-btn>
-          <v-btn color="blue darken-1" text @click="saveItem">Guardar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+  <!-- Crear/Editar Dialog -->
+  <v-dialog v-model="showDialog" max-width="500px">
+    <v-card>
+      <v-card-title>
+        <span class="headline">{{ isEditMode ? `Editar Club` : `Crear Club` }}</span>
+      </v-card-title>
+      <v-card-text>
+        <v-form ref="form">
+          <v-text-field
+            v-model="clubForm.name"
+            label="Nombre"
+          ></v-text-field>
+          <v-text-field
+            v-model="clubForm.email"
+            label="Correo Electrónico"
+          ></v-text-field>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" text @click="cancel">Cancelar</v-btn>
+        <v-btn color="blue darken-1" text @click="saveItem">Guardar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
