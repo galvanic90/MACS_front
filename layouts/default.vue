@@ -28,9 +28,7 @@
         >
         <v-list>
           <v-list-item v-for="(item, index) in items" :key="index" :to="item.route"> 
-            <v-list-item-content> 
               <v-list-item-title>{{ item.title }}</v-list-item-title> 
-            </v-list-item-content>
            </v-list-item>
            </v-list>
         </v-navigation-drawer>
