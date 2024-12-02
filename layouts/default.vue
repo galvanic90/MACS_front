@@ -53,14 +53,6 @@
             title: 'Club',
             route: '/club',
           },
-          {
-            title: 'Fizz',
-            value: 'fizz',
-          },
-          {
-            title: 'Buzz',
-            value: 'buzz',
-          },
         ],
       }),
   
