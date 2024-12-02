@@ -30,9 +30,11 @@ const headers = ref([
 const showDialog = ref(false);
 const isEditMode = ref(false);
 const clubForm = ref({ name: '', email: '' });
+const saveError = ref('');
 
 const resetClubForm = () => {
   clubForm.value = { name: '', email: '' };
+  saveError.value = ''; // Reset error message
 };
 
 const createItem = () => {
@@ -68,6 +70,7 @@ const saveItem = async () => {
     showDialog.value = false;
   } catch (error) {
     console.error('Error al guardar los datos:', error); // Error handling
+    saveError.value = 'Error al guardar los datos. Por favor, inténtelo de nuevo.'; // Set error message
   }
 };
 
@@ -129,6 +132,7 @@ watch(showDialog, (newVal) => {
             label="Correo Electrónico"
           ></v-text-field>
         </v-form>
+        <v-alert v-if="saveError" type="error">{{ saveError }}</v-alert>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>

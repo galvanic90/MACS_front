@@ -41,7 +41,13 @@ const deleteItem = () => {
 </script>
 
 <template>
-  <v-data-table :headers="headers" :items="items" class="elevation-1">
+  <v-data-table
+      :headers="headers"
+      :items="items"
+      class="elevation-1"
+      :items-per-page="5"
+      items-per-page-text="Elementos por página:"
+    >
     <template v-slot:item.actions="{ item }">
       <v-icon small @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
       <v-icon small @click="confirmDelete(item)" color="red">mdi-delete</v-icon>
