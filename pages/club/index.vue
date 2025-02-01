@@ -11,6 +11,14 @@ const { data: clubs, refresh, status, error } = useAsyncData('clubs', () =>
   fetcher('/club')
 );
 
+const { data: countries } = useAsyncData('country', () =>
+  fetcher('/country')
+);
+
+const { data: municipalities } = useAsyncData('municipality', () =>
+  fetcher('/municipality')
+);
+
 const headers = ref([
   { title: "Id", value: "id" },
   { title: "Nombre", value: "name" },
@@ -44,9 +52,12 @@ const createItem = () => {
 };
 
 const editItem = (item) => {
+  console.log(item.municipality)
   clubForm.value = {
     name: item.name || '',
     email: item.email || '',
+    countryId: item.country.id,
+    municipalityId: item.municipality.id,
     id: item.id || null // Assuming 'id' is also a property
   };
   isEditMode.value = true;
@@ -96,6 +107,15 @@ watch(showDialog, (newVal) => {
     resetClubForm();
   }
 });
+
+function municipalityFilter (itemTitle, queryText, item) {
+        const municipalityName = item.raw.name.toLowerCase()
+        const departmentName = item.raw.department.name.toLowerCase()
+        const searchText = queryText.toLowerCase()
+
+        return municipalityName.indexOf(searchText) > -1 ||
+            departmentName.indexOf(searchText) > -1
+}
 </script>
 
 <template>
@@ -131,6 +151,24 @@ watch(showDialog, (newVal) => {
             v-model="clubForm.email"
             label="Correo Electrónico"
           ></v-text-field>
+          <v-select label="Pais" :items="countries" item-title="name" item-value="id"
+            v-model="clubForm.countryId"></v-select>
+            <v-autocomplete
+              label="Municipio"
+              :items="municipalities"
+              item-title="name"
+              item-value="id"
+              v-model="clubForm.municipalityId"
+              :custom-filter="municipalityFilter"
+            >
+              <template v-slot:item="{ props, item }">
+                  <v-list-item
+                  v-bind="props"
+                  :subtitle="item.raw.department.name"
+                  :title="item.raw.name"
+                  ></v-list-item>
+              </template>
+            </v-autocomplete>
         </v-form>
         <v-alert v-if="saveError" type="error">{{ saveError }}</v-alert>
       </v-card-text>
