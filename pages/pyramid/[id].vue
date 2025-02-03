@@ -17,7 +17,8 @@
   import type IRound from "vue3-tournament/interface/IRound"
   import "vue3-tournament/style.css"
   const { fetcher } = useMacsApi();
-  const category = useState();
+  const route = useRoute()
+  const category = route.params.id;
   
   const onMatchClick = (matchId: string | number): void => {
     alert(`click: ${matchId}`)
@@ -28,7 +29,12 @@
     console.log("match", match)
   }
   
+  const { data: categories } = useAsyncData('categories', () =>
+    fetcher('/categ-champ')
+  );
+
+
   const { data: rounds } = useAsyncData('categories', () =>
-    fetcher('/pyramid/2')
+    fetcher(`/pyramid/${category}`)
   );
   </script>
