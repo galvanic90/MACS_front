@@ -14,7 +14,6 @@
 
 <script lang="ts" setup>
   import { TournamentBracket } from "vue3-tournament"
-  import type IRound from "vue3-tournament/interface/IRound"
   import "vue3-tournament/style.css"
   const { fetcher } = useMacsApi();
   const route = useRoute()
