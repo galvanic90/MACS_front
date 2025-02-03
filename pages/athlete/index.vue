@@ -8,20 +8,20 @@ import { useMacsApi } from '~/composables/useMacsApi'; const { fetcher } = useMa
 
 
 // Reactive state
-const { data: athletes, refresh, status } = useAsyncData('athlete', () =>
+const { data: athletes, refresh, status } = await useAsyncData('athlete', () =>
   fetcher('/athlete')
 );
 
-const { data: countries } = useAsyncData('country', () =>
+const { data: countries } = await useAsyncData('country', () =>
   fetcher('/country')
 );
-const { data: clubs } = useAsyncData('club', () =>
+const { data: clubs } = await useAsyncData('club', () =>
   fetcher('/club')
 );
-const { data: documentTypes } = useAsyncData('doc-type', () =>
+const { data: documentTypes } = await useAsyncData('doc-type', () =>
   fetcher('/doc-type')
 );
-const { data: belts } = useAsyncData('belt-grade', () =>
+const { data: belts } = await useAsyncData('belt-grade', () =>
   fetcher('/belt-grade')
 );
 
