@@ -23,7 +23,7 @@
   
         <v-navigation-drawer
           v-model="drawer"
-          :location="$vuetify.display.mobile ? 'bottom' : undefined"
+          :location="undefined"
           temporary
         >
         <v-list>
@@ -52,6 +52,14 @@
           {
             title: 'Club',
             route: '/club',
+          },
+          {
+            title: 'Campeonato',
+            route: '/championship',
+          },
+          {
+            title: 'Ubicación',
+            route: '/location',
           },
         ],
       }),

@@ -120,7 +120,7 @@ function municipalityFilter (itemTitle, queryText, item) {
 
 <template>
   <v-toolbar flat>
-    <v-toolbar-title>Lista de Clubes</v-toolbar-title>
+    <v-toolbar-title>Clubes</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn color="primary" @click="createItem">Crear Club</v-btn>
   </v-toolbar>
