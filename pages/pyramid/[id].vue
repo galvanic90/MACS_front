@@ -12,18 +12,18 @@
   
 </template>
 
-<script lang="ts" setup>
+<script setup>
   import { TournamentBracket } from "vue3-tournament"
   import "vue3-tournament/style.css"
   const { fetcher } = useMacsApi();
   const route = useRoute()
   const category = route.params.id;
   
-  const onMatchClick = (matchId: string | number): void => {
+  const onMatchClick = (matchId) => {
     alert(`click: ${matchId}`)
   }
   
-  const onParticipantClick = (participant: any, match: any): void => {
+  const onParticipantClick = (participant, match) => {
     console.log("participant", participant) // team or feedIn
     console.log("match", match)
   }
