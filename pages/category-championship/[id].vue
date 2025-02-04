@@ -13,42 +13,49 @@ const { data: championship } = await useAsyncData('championship', () =>
   fetcher(`/championship/${championshipId}`)
 );
 
-const { data: categories } = await useAsyncData('categories', () =>
-  fetcher(`/categories`)
-);
-
-
-
 // Reactive state
 const { data: categoriesChampionship, refresh, status, error } = await useAsyncData('category-championship', () =>
   fetcher(`/championship/${championshipId}/categ-champ`)
 );
 
+const { data: belts } = await useAsyncData('belts', () =>
+  fetcher(`/category-belt-grade`)
+);
+
+const { data: weights } = await useAsyncData('weights', () =>
+  fetcher(`/category-weight`)
+);
+
+const { data: ages } = await useAsyncData('ages', () =>
+  fetcher(`/category-age`)
+);
+
 const headers = ref([
   { title: "Id", value: "id" },
-  { title: "Campeonato", value: "championship.name" },
-  {
-    title: "Categoría",
-    align: "center",
-    children: [
-      { title: "Sexo", key: "category.sex" },
-      { title: "Peso", key: "category.categoriesWeight.name" },
-      { title: "Grado", key: "category.categoriesBeltGrade.name" },
-      { title: "Edad", key: "category.categoriesAge.name" },
-    ]
-  },
+  { title: "Sexo", key: "sex" },
+  { title: "Peso", key: "categoriesWeight.name" },
+  { title: "Grado", key: "categoriesBeltGrade.name" },
+  { title: "Edad", key: "categoriesAge.name" },
   { title: 'Actions', key: 'actions', sortable: false }
 ]);
 
 const showDialog = ref(false);
 const isEditMode = ref(false);
-const categoriesForm = ref({ name: '', email: '' });
+const categoriesForm = ref({  });
 const saveError = ref('');
 
 
 const createItem = () => {
   isEditMode.value = false;
   showDialog.value = true;
+  saveError.value = false;
+  categoriesForm.value = {
+    championship: championshipId,
+    sex: "",
+    weight: "",
+    age: "",
+    belt: ""
+  }
 };
 
 const saveItem = async () => {
@@ -80,13 +87,14 @@ const handleDelete = async (id) => {
     console.error('Error al eliminar los datos:', error); // Error handling
   }
 };
+const sexos = [{ value: "MALE", title: "Masculino" }, { value: "FEMALE", title: "Femenino" }];
 
 
 </script>
 
 <template>
   <v-toolbar flat>
-    <v-toolbar-title>Categorías campeonato {{ championship.name }}</v-toolbar-title>
+    <v-toolbar-title>Categorías {{ championship.name }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn color="primary" @click="createItem">Asociar Categoría</v-btn>
   </v-toolbar>
@@ -110,8 +118,10 @@ const handleDelete = async (id) => {
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
-          <v-select label="Categories" :items="categories" item-title="sex" item-value="id"
-            v-model="categoriesForm.category"></v-select>
+          <v-select label="Sexo" :items="sexos" v-model="categoriesForm.sex"></v-select>
+          <v-select label="Peso" :items="weights" v-model="categoriesForm.weight" item-value="id" item-title="name"></v-select>
+          <v-select label="Edad" :items="ages" v-model="categoriesForm.age" item-value="id" item-title="name"></v-select>
+          <v-select label="Experiencia" :items="belts" v-model="categoriesForm.belt" item-value="id" item-title="name"></v-select>
         </v-form>
         <v-alert v-if="saveError" type="error">{{ saveError }}</v-alert>
       </v-card-text>
