@@ -30,27 +30,28 @@ const headers = ref([
 
 const showDialog = ref(false);
 const isEditMode = ref(false);
-const championshipForm = ref({ name: '', startEventDate: '', endEventDate: ''});
+const championshipForm = ref({ endEventDate: '', name: '', startEventDate: ''});
 const saveError = ref('');
 
-const resetLocationForm = () => {
-  championshipForm.value = { name: '', startEventDate: '', endEventDate: ''};
+const resetChampionshipForm = () => {
+  championshipForm.value = { endEventDate: '', name: '', startEventDate: ''};
   saveError.value = ''; // Reset error message
 };
 
 const createItem = () => {
-  resetLocationForm(); // Reset form
+  resetChampionshipForm(); // Reset form
   isEditMode.value = false;
   showDialog.value = true;
 };
 
 const editItem = (item) => {
+  console.log(item)
   championshipForm.value = {
+    endEventDate: item.endEventDate || '',
     name: item.name || '',
     startEventDate: item.startEventDate || '',
-    endEventDate: item.endEventDate || '',
-    location:item.location?.id || null,
-    club:item.club?.id || null,
+    club: item.club.id || null,
+    location: item.location.id || null,
     id: item.id || null
   }
   isEditMode.value = true;
@@ -58,6 +59,7 @@ const editItem = (item) => {
 }
 
 const saveItem = async () => {
+  console.log(championshipForm.value)
   try {
     if(isEditMode.value && championshipForm.value.id){
       await fetcher(`/championship/${championshipForm.value.id}`, {
@@ -65,6 +67,7 @@ const saveItem = async () => {
         body: championshipForm.value
       })
     } else{
+  
       await fetcher('/championship', {
         method: 'POST',
         body: championshipForm.value
@@ -79,7 +82,7 @@ const saveItem = async () => {
 }
 
 const cancel = () => {
-  resetLocationForm(); // Reset form
+  resetChampionshipForm(); // Reset form
   showDialog.value = false;
 };
 
@@ -96,7 +99,7 @@ const handleDelete = async (id) => {
 
 watch(showDialog, (newVal) => {
   if (!newVal) {
-    resetLocationForm();
+    resetChampionshipForm();
   }
 });
 
@@ -109,7 +112,11 @@ watch(showDialog, (newVal) => {
       <v-btn color="primary" @click="createItem">Crear Campeonato</v-btn>
   </v-toolbar>
 
+  <v-alert v-if="status === 'error'" type="error">Error al obtener los datos</v-alert>
+  <v-progress-circular v-if="status === 'loading'" indeterminate></v-progress-circular>
+  
   <CrudComponent
+      v-if="status === 'success'"
       :items="championships"
       :headers="headers"
       entityName="Campeonato"
@@ -117,7 +124,7 @@ watch(showDialog, (newVal) => {
       @delete="handleDelete"
     />
 
-      <v-dialog v-model="showDialog" max-width="500px">
+    <v-dialog v-model="showDialog" max-width="500px">
     <v-card>
       <v-card-title>
         <span class="headline">{{ isEditMode ? `Editar Campeonato` : `Crear Campeonato` }}</span>
@@ -132,7 +139,8 @@ watch(showDialog, (newVal) => {
           <v-select label="Club" :items="clubs" item-title="name" item-value="id"
             v-model="championshipForm.club"></v-select>
 
-      </v-form>   
+      </v-form>  
+      <v-alert v-if="saveError" type="error">{{ saveError }}</v-alert> 
       </v-card-text>
 
       <v-card-actions>
