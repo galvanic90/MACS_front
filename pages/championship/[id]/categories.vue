@@ -94,14 +94,14 @@ const sexos = [{ value: "MALE", title: "Masculino" }, { value: "FEMALE", title: 
 
 <template>
   <v-toolbar flat>
-    <v-toolbar-title>Categorías {{ championship.name }}</v-toolbar-title>
+    <v-toolbar-title>Categorías {{ championship? championship.name: "Campeonatos" }}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn color="primary" @click="createItem">Asociar Categoría</v-btn>
+    <v-btn v-if="championship" color="primary" @click="createItem">Asociar Categoría</v-btn>
   </v-toolbar>
   <v-alert v-if="status === 'error'" type="error">Error al obtener los datos</v-alert>
   <v-progress-circular v-if="status === 'loading'" indeterminate></v-progress-circular>
-  
-  <CrudComponent
+  <v-alert v-if="!championship" type="error">Campeonato no valido</v-alert>
+  <CrudComponent v-else
     v-if="status === 'success'"
     :items="categoriesChampionship"
     :headers="headers"
