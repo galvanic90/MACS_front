@@ -130,7 +130,7 @@ watch(showDialog, (newVal) => {
           <v-date-input label="Fecha fin" v-model="championshipForm.endEventDate"></v-date-input>
           <v-select label="Ubicaciones" :items="locations" item-title="name" item-value="id" v-model="championshipForm.location"></v-select>  
           <v-select label="Club" :items="clubs" item-title="name" item-value="id"
-            v-model="championshipForm.clubId"></v-select>
+            v-model="championshipForm.club"></v-select>
 
       </v-form>   
       </v-card-text>
