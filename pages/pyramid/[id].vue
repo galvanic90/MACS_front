@@ -70,7 +70,7 @@
   );
 
   const { data: registrations } = useAsyncData('registrations', () =>
-    fetcher(`/registrations`)
+    fetcher(`/category/${categoryId}/registrations`)
   );
 
   const { data: rounds, refresh } = useAsyncData('pyramid', () =>
