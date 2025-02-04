@@ -30,11 +30,11 @@ const headers = ref([
 
 const showDialog = ref(false);
 const isEditMode = ref(false);
-const championshipForm = ref({ endEventDate: '', name: '', startEventDate: ''});
+const championshipForm = ref({  name: ''});
 const saveError = ref('');
 
 const resetChampionshipForm = () => {
-  championshipForm.value = { endEventDate: '', name: '', startEventDate: ''};
+  championshipForm.value = {  name: ''};
   saveError.value = ''; // Reset error message
 };
 
