@@ -13,12 +13,6 @@ const { data: championship } = await useAsyncData('championship', () =>
   fetcher(`/championship/${championshipId}`)
 );
 
-const { data: categories } = await useAsyncData('categories', () =>
-  fetcher(`/categories`)
-);
-
-
-
 // Reactive state
 const { data: categoriesChampionship, refresh, status, error } = await useAsyncData('category-championship', () =>
   fetcher(`/championship/${championshipId}/categ-champ`)
@@ -26,17 +20,10 @@ const { data: categoriesChampionship, refresh, status, error } = await useAsyncD
 
 const headers = ref([
   { title: "Id", value: "id" },
-  { title: "Campeonato", value: "championship.name" },
-  {
-    title: "Categoría",
-    align: "center",
-    children: [
-      { title: "Sexo", key: "category.sex" },
-      { title: "Peso", key: "category.categoriesWeight.name" },
-      { title: "Grado", key: "category.categoriesBeltGrade.name" },
-      { title: "Edad", key: "category.categoriesAge.name" },
-    ]
-  },
+  { title: "Sexo", key: "sex" },
+  { title: "Peso", key: "categoriesWeight.name" },
+  { title: "Grado", key: "categoriesBeltGrade.name" },
+  { title: "Edad", key: "categoriesAge.name" },
   { title: 'Actions', key: 'actions', sortable: false }
 ]);
 
@@ -86,7 +73,7 @@ const handleDelete = async (id) => {
 
 <template>
   <v-toolbar flat>
-    <v-toolbar-title>Categorías campeonato {{ championship.name }}</v-toolbar-title>
+    <v-toolbar-title>Categorías {{ championship.name }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn color="primary" @click="createItem">Asociar Categoría</v-btn>
   </v-toolbar>
@@ -110,8 +97,7 @@ const handleDelete = async (id) => {
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
-          <v-select label="Categories" :items="categories" item-title="sex" item-value="id"
-            v-model="categoriesForm.category"></v-select>
+
         </v-form>
         <v-alert v-if="saveError" type="error">{{ saveError }}</v-alert>
       </v-card-text>
