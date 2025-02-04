@@ -60,6 +60,7 @@ function editItem(item) {
   editedItem.value.idNumber = item.idNumber
   editedItem.value.sex = item.sex
   editedItem.value.birthDate = item.birthDate
+  editedItem.value.weight = item.weight
   if (item.documentType) {
     editedItem.value.documentTypeId = item.documentType.id
   }
@@ -126,10 +127,10 @@ const cancel = () => {
 
 <template>
   <v-toolbar flat>
-      <v-toolbar-title>Lista de Atletas</v-toolbar-title>
+      <v-toolbar-title>Deportistas</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn color="primary" @click="createItem">Crear Atleta</v-btn>
-    </v-toolbar>
+  </v-toolbar>
   <CrudComponent
       :items="athletes"
       :headers="headers"
@@ -159,7 +160,7 @@ const cancel = () => {
             v-model="editedItem.clubId"></v-select>
           <v-select label="Cinturon" :items="belts" item-title="color" item-value="id"
             v-model="editedItem.beltId"></v-select>
-
+          <v-text-field v-model="editedItem.weight" label="Peso"></v-text-field>
           <v-date-input label="Fecha de nacimiento" v-model="editedItem.birthDate"></v-date-input>
         </v-container>
       </v-card-text>
