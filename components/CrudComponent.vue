@@ -14,6 +14,14 @@ const props = defineProps({
   entityName: {
     type: String,
     required: true
+  },
+  editable: {
+    type: Boolean,
+    default: true
+  },
+  removable: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -49,10 +57,10 @@ const deleteItem = () => {
       items-per-page-text="Elementos por página:"
     >
     <template v-slot:item.actions="{ item }">
-      <slot name="item.actions">
-        <v-icon small @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
-        <v-icon small @click="confirmDelete(item)" color="red">mdi-delete</v-icon>
+      <v-icon v-if="editable==true" small @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
+      <slot name="item.actions" :item="item">
       </slot>
+      <v-icon v-if="removable==true" small @click="confirmDelete(item)" color="red">mdi-delete</v-icon>
     </template>
   </v-data-table>
 

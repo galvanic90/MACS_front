@@ -107,7 +107,11 @@ const sexos = [{ value: "MALE", title: "Masculino" }, { value: "FEMALE", title: 
     :headers="headers"
     entityName="Categoría campeonato"
     @delete="handleDelete"
+    editable="false"
   >
+    <template v-slot:item.actions="{ item }">
+      <NuxtLink title="Ver Piramide" :to="`/pyramid/${item.id}`"><v-icon small color="blue">mdi-triangle</v-icon></NuxtLink>
+    </template>
   </CrudComponent>
 
   <!-- Crear/Editar Dialog -->
