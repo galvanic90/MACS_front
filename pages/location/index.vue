@@ -41,7 +41,7 @@ const createItem = () => {
 };
 
 const editItem = (item) => {
-    console.log("item", item) 
+    
     locationForm.value = {
         name: item.name || '',
         address: item.address || '',

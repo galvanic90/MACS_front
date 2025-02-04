@@ -53,7 +53,7 @@ const isEditMode = ref(false);
 const editedItem = ref({})
 
 function editItem(item) {
-  console.log(item)
+  
   editedItem.value.id = item.id
   editedItem.value.name = item.name
   editedItem.value.lastName = item.lastName
@@ -78,7 +78,7 @@ function editItem(item) {
 }
 
 const saveItem = async () => {
-  console.log(editedItem)
+
   try {
     if (isEditMode.value && editedItem.value.id) {
       await fetcher(`/athlete/${editedItem.value.id}`, {
