@@ -122,7 +122,11 @@ watch(showDialog, (newVal) => {
       entityName="Campeonato"
       @edit="editItem"
       @delete="handleDelete"
-    />
+    >
+    <template v-slot:item.actions="{ item }">
+      <NuxtLink title="Ver Categorias" :to="`/championship/${item.id}/categories/`"><v-icon small color="blue">mdi-format-list-checks</v-icon></NuxtLink>
+    </template>
+    </CrudComponent>
 
     <v-dialog v-model="showDialog" max-width="500px">
     <v-card>

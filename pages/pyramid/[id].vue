@@ -1,6 +1,7 @@
 <template>
   <div v-if="!rounds" >
     No se encontraron combates para la categoría seleccionada
+    <v-btn @click="generate">Generate</v-btn>
   </div>
   <template v-else>
     <div>
@@ -89,6 +90,21 @@
       });
       refresh()
       showDialog.value = false
+    } catch (error) {
+      console.error('Error al guardar los datos:', error); // Error handling
+      saveError.value = 'Error al guardar los datos. Por favor, inténtelo de nuevo.'; // Set error message
+    }
+  };
+
+  const generate = async () => {
+    try {
+      await fetcher(`/combat`, {
+        method: 'POST',
+        body: {
+          category: categoryId
+        }
+      });
+      refresh()
     } catch (error) {
       console.error('Error al guardar los datos:', error); // Error handling
       saveError.value = 'Error al guardar los datos. Por favor, inténtelo de nuevo.'; // Set error message
