@@ -5,10 +5,10 @@
   <template v-else>
     <div>
       {{ category.championship.name }}
-      {{ category.category?.sex }}
-      {{ category.category?.categoriesAge?.name }}
-      {{ category.category?.categoriesWeight?.name }}
-      {{ category.category?.categoriesBeltGrade?.name }}
+      {{ category.sex }}
+      {{ category.categoriesAge?.name }}
+      {{ category.categoriesWeight?.name }}
+      {{ category.categoriesBeltGrade?.name }}
     </div>
     <TournamentBracket
       :rounds="rounds"

@@ -18,6 +18,18 @@ const { data: categoriesChampionship, refresh, status, error } = await useAsyncD
   fetcher(`/championship/${championshipId}/categ-champ`)
 );
 
+const { data: belts } = await useAsyncData('belts', () =>
+  fetcher(`/category-belt-grade`)
+);
+
+const { data: weights } = await useAsyncData('weights', () =>
+  fetcher(`/category-weight`)
+);
+
+const { data: ages } = await useAsyncData('ages', () =>
+  fetcher(`/category-age`)
+);
+
 const headers = ref([
   { title: "Id", value: "id" },
   { title: "Sexo", key: "sex" },
@@ -29,13 +41,21 @@ const headers = ref([
 
 const showDialog = ref(false);
 const isEditMode = ref(false);
-const categoriesForm = ref({ name: '', email: '' });
+const categoriesForm = ref({  });
 const saveError = ref('');
 
 
 const createItem = () => {
   isEditMode.value = false;
   showDialog.value = true;
+  saveError.value = false;
+  categoriesForm.value = {
+    championship: championshipId,
+    sex: "",
+    weight: "",
+    age: "",
+    belt: ""
+  }
 };
 
 const saveItem = async () => {
@@ -67,6 +87,7 @@ const handleDelete = async (id) => {
     console.error('Error al eliminar los datos:', error); // Error handling
   }
 };
+const sexos = [{ value: "MALE", title: "Masculino" }, { value: "FEMALE", title: "Femenino" }];
 
 
 </script>
@@ -97,7 +118,10 @@ const handleDelete = async (id) => {
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
-
+          <v-select label="Sexo" :items="sexos" v-model="categoriesForm.sex"></v-select>
+          <v-select label="Peso" :items="weights" v-model="categoriesForm.weight" item-value="id" item-title="name"></v-select>
+          <v-select label="Edad" :items="ages" v-model="categoriesForm.age" item-value="id" item-title="name"></v-select>
+          <v-select label="Experiencia" :items="belts" v-model="categoriesForm.belt" item-value="id" item-title="name"></v-select>
         </v-form>
         <v-alert v-if="saveError" type="error">{{ saveError }}</v-alert>
       </v-card-text>
