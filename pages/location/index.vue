@@ -46,7 +46,7 @@ const editItem = (item) => {
         name: item.name || '',
         address: item.address || '',
         phoneNumber: item.phoneNumber || '',
-        municipalityId: item.municipality.id || null,
+        municipality: item.municipality?.id || null,
         id: item.id || null // Assuming 'id' is also a property
     };
     isEditMode.value = true;
