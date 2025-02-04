@@ -49,8 +49,10 @@ const deleteItem = () => {
       items-per-page-text="Elementos por página:"
     >
     <template v-slot:item.actions="{ item }">
-      <v-icon small @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
-      <v-icon small @click="confirmDelete(item)" color="red">mdi-delete</v-icon>
+      <slot name="item.actions">
+        <v-icon small @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
+        <v-icon small @click="confirmDelete(item)" color="red">mdi-delete</v-icon>
+      </slot>
     </template>
   </v-data-table>
 
