@@ -3,6 +3,13 @@
     No se encontraron combates para la categoría seleccionada
   </div>
   <template v-else>
+    <div>
+      {{ category.championship.name }}
+      {{ category.category?.sex }}
+      {{ category.category?.categoriesAge?.name }}
+      {{ category.category?.categoriesWeight?.name }}
+      {{ category.category?.categoriesBeltGrade?.name }}
+    </div>
     <TournamentBracket
       :rounds="rounds"
       @onMatchClick="onMatchClick"
@@ -17,10 +24,10 @@
   import "vue3-tournament/style.css"
   const { fetcher } = useMacsApi();
   const route = useRoute()
-  const category = route.params.id;
+  const categoryId = route.params.id;
   
   const onMatchClick = (matchId) => {
-    alert(`click: ${matchId}`)
+    console.log(`click: ${matchId}`)
   }
   
   const onParticipantClick = (participant, match) => {
@@ -28,12 +35,12 @@
     console.log("match", match)
   }
   
-  const { data: categories } = useAsyncData('categories', () =>
-    fetcher('/categ-champ')
+  const { data: category } = useAsyncData('category', () =>
+    fetcher(`/categ-champ/${categoryId}`)
   );
 
 
-  const { data: rounds } = useAsyncData('categories', () =>
-    fetcher(`/pyramid/${category}`)
+  const { data: rounds } = useAsyncData('pyramid', () =>
+    fetcher(`/pyramid/${categoryId}`)
   );
   </script>
