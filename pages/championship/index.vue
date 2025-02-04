@@ -1,18 +1,104 @@
 <script setup>
-import { ref } from 'vue'
-import { VDateInput } from 'vuetify/labs/VDateInput'
+import { ref } from 'vue';
+import { VDateInput } from 'vuetify/labs/VDateInput';
 import { useAsyncData } from 'nuxt/app';
 import CrudComponent from '~/components/CrudComponent.vue';
 
 import { useMacsApi } from '~/composables/useMacsApi'; const { fetcher } = useMacsApi();
 
-const { data: clubs } = await useAsyncData('club', () =>
-    fetcher('/club')
+const { data: championships, refresh, status } = await useAsyncData('championships', () =>
+    fetcher('/championship')
 );
 
 const { data: locations } = await useAsyncData('location', () =>
     fetcher('/location')
 );
+
+const { data: clubs } = await useAsyncData('club', () =>
+  fetcher('/club')
+);
+
+const headers = ref([
+    { title: "Id", value: "id" },
+    { title: "Nombre", value: "name" },
+    { title: "Fecha inicio", value: "startEventDate"},
+    { title: "Fecha fin", value: "endEventDate"},
+    { title: "Ubicación", value: "location.name"},
+    { title: "Club", value: "club.name"},
+    { title: 'Actions', value: 'actions', sortable: false }
+]);
+
+const showDialog = ref(false);
+const isEditMode = ref(false);
+const championshipForm = ref({ name: '', startEventDate: '', endEventDate: ''});
+const saveError = ref('');
+
+const resetLocationForm = () => {
+  championshipForm.value = { name: '', startEventDate: '', endEventDate: ''};
+  saveError.value = ''; // Reset error message
+};
+
+const createItem = () => {
+  resetLocationForm(); // Reset form
+  isEditMode.value = false;
+  showDialog.value = true;
+};
+
+const editItem = (item) => {
+  championshipForm.value = {
+    name: item.name || '',
+    startEventDate: item.startEventDate || '',
+    endEventDate: item.endEventDate || '',
+    location:item.location?.id || null,
+    club:item.club?.id || null,
+    id: item.id || null
+  }
+  isEditMode.value = true;
+  showDialog.value = true;
+}
+
+const saveItem = async () => {
+  try {
+    if(isEditMode.value && championshipForm.value.id){
+      await fetcher(`/championship/${championshipForm.value.id}`, {
+        method: 'PUT',
+        body: championshipForm.value
+      })
+    } else{
+      await fetcher('/championship', {
+        method: 'POST',
+        body: championshipForm.value
+      });
+    }
+    await refresh(); // Refresh data
+    showDialog.value = false;
+  } catch (error) {
+    console.error('Error al guardar los datos:', error); // Error handling
+    saveError.value = 'Error al guardar los datos. Por favor, inténtelo de nuevo.'; // Set error message
+  }
+}
+
+const cancel = () => {
+  resetLocationForm(); // Reset form
+  showDialog.value = false;
+};
+
+const handleDelete = async (id) => {
+  try {
+    await fetcher(`/championship/${id}`, {
+      method: 'DELETE'
+    });
+    await refresh(); // Refresh data
+  } catch (error) {
+    console.error('Error al eliminar los datos:', error); // Error handling
+  }
+};
+
+watch(showDialog, (newVal) => {
+  if (!newVal) {
+    resetLocationForm();
+  }
+});
 
 </script>
 
@@ -24,9 +110,9 @@ const { data: locations } = await useAsyncData('location', () =>
   </v-toolbar>
 
   <CrudComponent
-      :items="athletes"
+      :items="championships"
       :headers="headers"
-      entityName="Atleta"
+      entityName="Campeonato"
       @edit="editItem"
       @delete="handleDelete"
     />
@@ -34,27 +120,19 @@ const { data: locations } = await useAsyncData('location', () =>
       <v-dialog v-model="showDialog" max-width="500px">
     <v-card>
       <v-card-title>
-        <span class="headline">{{ isEditMode ? `Editar Atleta` : `Crear Atleta` }}</span>
+        <span class="headline">{{ isEditMode ? `Editar Campeonato` : `Crear Campeonato` }}</span>
       </v-card-title>
 
       <v-card-text>
-        <v-container>
-          <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
-          <v-text-field v-model="editedItem.lastName" label="Apellido"></v-text-field>
-          <v-select label="Tipo de documento" :items="documentTypes" item-title="name" item-value="id"
-            v-model="editedItem.documentTypeId"></v-select>
-          <v-text-field v-model="editedItem.idNumber" label="Numero de identificación"></v-text-field>
-          <v-select label="Sexo" :items="sexos" v-model="editedItem.sex"></v-select>
-
-          <v-select label="Pais" :items="countries" item-title="name" item-value="id"
-            v-model="editedItem.countryId"></v-select>
+        <v-form ref="form">
+          <v-text-field v-model="championshipForm.name" label="Nombre"></v-text-field>
+          <v-date-input label="Fecha inicio" v-model="championshipForm.startEventDate"></v-date-input>
+          <v-date-input label="Fecha fin" v-model="championshipForm.endEventDate"></v-date-input>
+          <v-select label="Ubicaciones" :items="locations" item-title="name" item-value="id" v-model="championshipForm.location"></v-select>  
           <v-select label="Club" :items="clubs" item-title="name" item-value="id"
-            v-model="editedItem.clubId"></v-select>
-          <v-select label="Cinturon" :items="belts" item-title="color" item-value="id"
-            v-model="editedItem.beltId"></v-select>
-          <v-text-field v-model="editedItem.weight" label="Peso"></v-text-field>
-          <v-date-input label="Fecha de nacimiento" v-model="editedItem.birthDate"></v-date-input>
-        </v-container>
+            v-model="championshipForm.clubId"></v-select>
+
+      </v-form>   
       </v-card-text>
 
       <v-card-actions>
