@@ -49,21 +49,23 @@ const deleteItem = () => {
 </script>
 
 <template>
-  <v-data-table
-      :headers="headers"
-      :items="items"
-      class="elevation-1"
-      :items-per-page="5"
-      items-per-page-text="Elementos por página:"
-    >
-    <template v-slot:item.actions="{ item }">
-      <v-icon v-if="editable==true" small @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
-      <slot name="item.actions" :item="item">
-      </slot>
-      <v-icon v-if="removable==true" small @click="confirmDelete(item)" color="red">mdi-delete</v-icon>
-    </template>
-  </v-data-table>
-
+  <v-container>
+    <v-data-table
+        :headers="headers"
+        :items="items"
+        class="elevation-1"
+        :items-per-page="5"
+        items-per-page-text="Elementos por página:"
+        density="compact"
+      >
+      <template v-slot:item.actions="{ item }">
+        <v-icon v-if="editable==true" small @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
+        <slot name="item.actions" :item="item">
+        </slot>
+        <v-icon v-if="removable==true" small @click="confirmDelete(item)" color="red">mdi-delete</v-icon>
+      </template>
+    </v-data-table>
+  </v-container>
   <!-- Confirmación de Eliminación Dialog -->
   <v-dialog v-model="showDeleteConfirmDialog" max-width="500px">
     <v-card>

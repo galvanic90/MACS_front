@@ -50,8 +50,8 @@ const editItem = (item) => {
     endEventDate: item.endEventDate || '',
     name: item.name || '',
     startEventDate: item.startEventDate || '',
-    club: item.club.id || null,
-    location: item.location.id || null,
+    clubId: item.club.id || null,
+    locationId: item.location.id || null,
     id: item.id || null
   }
   isEditMode.value = true;
@@ -139,9 +139,9 @@ watch(showDialog, (newVal) => {
           <v-text-field v-model="championshipForm.name" label="Nombre"></v-text-field>
           <v-date-input label="Fecha inicio" v-model="championshipForm.startEventDate"></v-date-input>
           <v-date-input label="Fecha fin" v-model="championshipForm.endEventDate"></v-date-input>
-          <v-select label="Ubicaciones" :items="locations" item-title="name" item-value="id" v-model="championshipForm.location"></v-select>  
+          <v-select label="Ubicaciones" :items="locations" item-title="name" item-value="id" v-model="championshipForm.locationId"></v-select>  
           <v-select label="Club" :items="clubs" item-title="name" item-value="id"
-            v-model="championshipForm.club"></v-select>
+            v-model="championshipForm.clubId"></v-select>
 
       </v-form>  
       <v-alert v-if="saveError" type="error">{{ saveError }}</v-alert> 
