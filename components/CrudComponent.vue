@@ -22,6 +22,10 @@ const props = defineProps({
   removable: {
     type: Boolean,
     default: true
+  },
+  showSelect: {
+    type: Boolean,
+    default: false
   }
 });
 

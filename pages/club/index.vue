@@ -133,7 +133,11 @@ function municipalityFilter (itemTitle, queryText, item) {
     entityName="Club"
     @edit="editItem"
     @delete="handleDelete"
-  />
+  >
+    <template v-slot:item.actions="{ item }">
+      <NuxtLink title="Inscribir atletas" :to="`/club/${item.id}/athlete`"><v-icon small color="blue">mdi-account-check</v-icon></NuxtLink>
+    </template>  
+  </CrudComponent>
 
   <!-- Crear/Editar Dialog -->
   <v-dialog v-model="showDialog" max-width="500px">
