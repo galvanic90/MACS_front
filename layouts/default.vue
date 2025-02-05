@@ -61,6 +61,14 @@
             title: 'Ubicación',
             route: '/location',
           },
+          {
+            title: 'Categoría Peso',
+            route: '/weight',
+          },
+          {
+            title: 'Categoría cinturón',
+            route: '/belt',
+          },
         ],
       }),
   
